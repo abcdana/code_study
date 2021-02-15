@@ -9,12 +9,12 @@
       인증 <small>Auth</small>
    </div>
    <div class="panel-body">
-      <div class="pic"></div>
+      <div class="pic" style="background-image:url(/codestudy/pic/${pic});"></div>
       <div class="itemlist">
-         <div class="item">홍길동</div>
-         <div class="item">2020-01-01 10:11</div>
-         <div class="item">2020-01-01 10:11</div>
-         <div class="item">2020-01-01 10:11</div>
+         <div class="item">${name }(${id })</div>
+         <div class="item">${email }</div>
+         <div class="item">${regdate.substring(0, 10) }</div>
+         <div class="item">&nbsp;</div>
       </div>
    </div>
 </div>

@@ -53,6 +53,18 @@ public class Login extends HttpServlet {
 			session.setAttribute("id", dto.getId()); //가장 유용하게 쓰이는 값을 넣는것이 이득
 			// -> "인증티켓"이라고 부름
 			
+			
+			//사이트 전역을 계속 들고 다녀야 하는 정보가 있으면 -> 세션에 추가
+			//나머지 회원 정보 -> select
+			MemberDTO rdto = dao.getMember(id);
+			
+			session.setAttribute("name", rdto.getName());
+			session.setAttribute("pic", rdto.getPic());
+			session.setAttribute("regdate", rdto.getRegdate());
+			session.setAttribute("email", rdto.getEmail());
+			session.setAttribute("seq", rdto.getSeq());
+			
+			
 			//시작 페이지로 이동
 			resp.sendRedirect("/codestudy/index.do");
 			

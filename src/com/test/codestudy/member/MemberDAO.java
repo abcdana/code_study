@@ -87,5 +87,38 @@ public class MemberDAO {
 		
 		return 0;
 	}
+
+
+	//Login 서블릿이 id를 건네주면서 회원 정보를 달라고 위임
+	public MemberDTO getMember(String id) {
+		
+		try {
+			
+			String sql = "select * from tblMember where id = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setNString(1, id);
+			
+			rs = pstat.executeQuery();
+			
+			if (rs.next()) {
+				
+				MemberDTO dto = new MemberDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setEmail(rs.getString("email"));
+				dto.setPic(rs.getString("pic"));
+				dto.setRegdate(rs.getString("regdate"));
+				
+				return dto;
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return null;
+	}
 	
 }
