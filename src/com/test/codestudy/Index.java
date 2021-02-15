@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//http://localhost:8090/codestudy/index.do
+
 @WebServlet("/index.do")
 public class Index extends HttpServlet {
 	
