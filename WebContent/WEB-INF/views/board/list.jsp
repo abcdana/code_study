@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -90,55 +93,24 @@
                         </tr>
                     </thead>
                     <tbody>
+                        
+                        <c:forEach items="${list}" var="dto">
                         <tr>
                             <td>1</td>
-                            <td><a href="/codestudy/board/view.do">게시판 테스트중입니다.</a></td>
-                            <td>홍길동</td>
-                            <td>2020-01-01</td>
-                            <td>10</td>
+                            <td>
+                            	<a href="/codestudy/board/view.do?seq=${dto.seq }">${dto.subject}</a>
+                            	
+                            	<c:if test="${dto.gap < 1 }">
+                            		<span class="label label-danger">new</span>
+                            	</c:if>
+                            	
+                            </td>
+                            <td>${dto.name}</td>
+                            <td>${dto.regdate}</td>
+                            <td>${dto.readcount}</td>
                         </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><a href="/codestudy/board/view.do">게시판 테스트중입니다.</a></td>
-                            <td>홍길동</td>
-                            <td>2020-01-01</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><a href="/codestudy/board/view.do">게시판 테스트중입니다.</a></td>
-                            <td>홍길동</td>
-                            <td>2020-01-01</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><a href="/codestudy/board/view.do">게시판 테스트중입니다.</a></td>
-                            <td>홍길동</td>
-                            <td>2020-01-01</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><a href="/codestudy/board/view.do">게시판 테스트중입니다.</a></td>
-                            <td>홍길동</td>
-                            <td>2020-01-01</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><a href="/codestudy/board/view.do">게시판 테스트중입니다.</a></td>
-                            <td>홍길동</td>
-                            <td>2020-01-01</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><a href="/codestudy/board/view.do">게시판 테스트중입니다.</a></td>
-                            <td>홍길동</td>
-                            <td>2020-01-01</td>
-                            <td>10</td>
-                        </tr>
+                     	</c:forEach>
+                     	
                     </tbody>
                 </table>
 
@@ -177,10 +149,16 @@
                         <span class="glyphicon glyphicon-th-list"></span>
                         목록
                     </button>
+                    
+                    
+                    <!-- 로그인을 했을때만 이 버튼을 보여주기 -->
+                    <c:if test="${not empty id }">
                     <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/write.do';">
                         <span class="glyphicon glyphicon-plus"></span>
                         쓰기
                     </button>
+                    </c:if>
+                    
                 </div>
                 <div style="clear:both;"></div>
 			</div>

@@ -65,16 +65,16 @@
 			<div>
 				<h1>자유 게시판 <small>Board</small></h1>
                 
-
+				<form method="POST" action="/codestudy/board/writeok.do">
                 <table class="table write">
                     <tr>
                         <td>
-                            <input type="text" class="form-control" placeholder="subject" id="subject">
+                            <input type="text" class="form-control"  placeholder="subject" id="subject" name="subject">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <textarea class="form-control" id="content" placeholder="content"></textarea>
+                            <textarea class="form-control" id="content" name="content" placeholder="content"></textarea>
                         </td>
                     </tr>
                     <!-- 
@@ -85,7 +85,7 @@
                     </tr>
                      -->
                 </table>
-
+				
 
                 <div style="clear:both;"></div>
 
@@ -94,11 +94,13 @@
                         <span class="glyphicon glyphicon-chevron-left"></span>
                         뒤로
                     </button>
-                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/wridok.do';">
+                    <button type="submit" class="btn btn-default" >
                         <span class="glyphicon glyphicon-plus"></span>
                         쓰기
                     </button>
                 </div>
+                </form>
+                
                 <div style="clear:both;"></div>
 			</div>
 		</div>

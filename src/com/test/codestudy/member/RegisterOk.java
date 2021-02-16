@@ -95,7 +95,7 @@ public class RegisterOk extends HttpServlet{
 			
 			writer.print("<html><body>");
 			writer.print("<script>");
-			writer.print("alert('failed')");
+			writer.print("alert('failed');");
 			writer.print("history.back();");
 			writer.print("</script>");
 			writer.print("</body></html>");
