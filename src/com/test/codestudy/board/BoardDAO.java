@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.test.codestudy.DBUtil;
 
@@ -56,11 +57,20 @@ public class BoardDAO {
 
 	
 	//List 서블릿 -> 글 목록 달라고 위임
-	public ArrayList<BoardDTO> list() {
+	public ArrayList<BoardDTO> list(HashMap<String, String> map) {
 
 		try {
 			
-			String sql = "select * from vwBoard order by seq desc";
+			String where = "";
+			
+			if (map.get("search")!= null) {
+				//검색중...
+				where = String.format("where name like '%%%s%%' or subject like '%%%s%%' or content like '%%%s%%'", map.get("search"), map.get("search"), map.get("search"));
+			}
+			
+			String sql = String.format("select * from vwBoard %s order by seq desc", where);
+			
+			System.out.println(sql);
 			
 			pstat = conn.prepareStatement(sql);
 			rs = pstat.executeQuery();

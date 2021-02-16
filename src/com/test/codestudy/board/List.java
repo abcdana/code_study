@@ -2,6 +2,7 @@ package com.test.codestudy.board;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,22 @@ import javax.servlet.http.HttpSession;
 public class List extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		
+		//목록 or 검색
+		// - 목록 : list.do
+		// - 검색 : list.do?search=게시판
+		
+		HashMap<String,String> map = new HashMap<String,String>();
+		
+		String search = request.getParameter("search");
+		
+		if ( !(search == null || search.equals("")) ) {
+			map.put("search", search);
+		}
+		
+		
 		
 		//1. DB 작업 > select 
 		//2. 목록 반환 + jsp 전달 & 호출하기
@@ -31,7 +48,7 @@ public class List extends HttpServlet {
 		//1.
 		BoardDAO dao = new BoardDAO();
 		
-		ArrayList<BoardDTO> list = dao.list();
+		ArrayList<BoardDTO> list = dao.list(map);
 		
 		
 		//데이터 조작 -> 서블릿 담당
@@ -56,7 +73,7 @@ public class List extends HttpServlet {
 		
 		//2. 
 		request.setAttribute("list", list);
-		
+		request.setAttribute("search", search);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
 		dispatcher.forward(request, response);

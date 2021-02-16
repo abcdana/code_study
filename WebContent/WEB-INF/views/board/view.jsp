@@ -104,7 +104,7 @@
 
 
                 <div class="btns btn-group">
-                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/list.do';">
+                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/list.do?search=${search}';">
                         <span class="glyphicon glyphicon-th-list"></span>
                         목록
                     </button>

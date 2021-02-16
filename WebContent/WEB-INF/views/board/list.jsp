@@ -69,18 +69,24 @@
 			
 				<h1>자유 게시판 <small>Board</small></h1>
 				
-				<!-- 
+				<c:if test="${not empty search }">
                 <div class="message well well-sm">
-                    메시지 영역입니다.
+                    '${search }'(으)로 ${list.size() }건의 게시물을 검색했습니다.
                 </div>
-                 -->
-                <!-- 
+               	</c:if>
+                 
+                <!-- 상태유지를 위해서 검색은 주로 GET방식을 사용한다. --> 
+                <form id="searchForm" method="GET" action="/codestudy/board/list.do">
                 <div class="input-group search">
-                    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon2">
-                    <span class="input-group-addon" id="basic-addon2"><span class="glyphicon glyphicon-search"></span></span>
+                
+                    <input type="text" class="form-control" id="search" name="search" placeholder="" aria-describedby="basic-addon2" required value="${search }">
+                    
+                    <span class="input-group-addon" id="basic-addon2" style="cursor:pointer;" onclick="$('#searchForm').submit();"><span class="glyphicon glyphicon-search"></span></span>
                 </div>
+                </form> 
+                
                 <div style="clear:both;"></div>
-                 -->
+                 
                 
                 <table class="table table-hover list">
                     <thead>
@@ -98,7 +104,7 @@
                         <tr>
                             <td>1</td>
                             <td>
-                            	<a href="/codestudy/board/view.do?seq=${dto.seq }">${dto.subject}</a>
+                            	<a href="/codestudy/board/view.do?seq=${dto.seq }&search=${search}">${dto.subject}</a>
                             	
                             	<c:if test="${dto.gap < 1 }">
                             		<span class="label label-danger">new</span>

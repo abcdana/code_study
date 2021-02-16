@@ -26,7 +26,7 @@ public class View extends HttpServlet {
 		
 		//1.
 		String seq = request.getParameter("seq");
-		
+		String search = request.getParameter("search"); //검색어
 		
 		
 		//2.
@@ -55,6 +55,7 @@ public class View extends HttpServlet {
 		
 		//3. 
 		request.setAttribute("dto", dto);
+		request.setAttribute("search", search);
 		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/view.jsp");
