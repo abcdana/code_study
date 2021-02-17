@@ -26,24 +26,29 @@ public class BoardDAO {
 		try {
 			
 			conn.close();
-			
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		
+
 	}
 
+	
+	
 	// WriteOk 서블릿이 글쓰기를 위임
 	public int write(BoardDTO dto) {
 
 		try {
 
-			String sql = "insert into tblBoard (seq, subject, content, regdate, readcount, mseq) values (seqBoard.nextVal, ?, ?, default, default, ?)";
+			String sql = "insert into tblBoard (seq, subject, content, regdate, readcount, mseq, filename, orgfilename) values (seqBoard.nextVal, ?, ?, default, default, ?, ?, ?)";
 
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getSubject());
 			pstat.setString(2, dto.getContent());
 			pstat.setString(3, dto.getMseq());
+
+			pstat.setString(4, dto.getFilename());
+			pstat.setString(5, dto.getOrgfilename());
 
 			return pstat.executeUpdate(); // 1 or 0
 
@@ -70,7 +75,7 @@ public class BoardDAO {
 			
 			String sql = String.format("select * from vwBoard %s order by seq desc", where);
 			
-			System.out.println(sql);
+			//System.out.println(sql);
 			
 			pstat = conn.prepareStatement(sql);
 			rs = pstat.executeQuery();
@@ -92,6 +97,8 @@ public class BoardDAO {
 				
 				dto.setGap(rs.getInt("gap"));
 				
+				dto.setFilename(rs.getString("filename")); //파일명
+				
 				list.add(dto); //***잘 빼먹는 부분 : 에러메세지 안뜨니 주의할 것
 				
 			}
@@ -112,7 +119,7 @@ public class BoardDAO {
 
 		try {
 			
-			String sql = "select * from tblBoard where seq = ?";
+			String sql = "select b.*, (select name from tblMember where seq = b.mseq) as name, (select id from tblMember where seq = b.mseq) as id from tblBoard b where seq = ?";
 			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
@@ -130,7 +137,15 @@ public class BoardDAO {
 				dto.setRegdate(rs.getString("regdate"));
 				dto.setReadcount(rs.getInt("readcount"));
 				dto.setMseq(rs.getString("mseq"));
+				
+				dto.setName(rs.getString("name"));
+				dto.setId(rs.getString("id"));
+				
+				dto.setFilename(rs.getString("filename"));
+				dto.setOrgfilename(rs.getString("orgfilename"));
+				dto.setDownloadcount(rs.getInt("downloadcount"));
 
+				
 				return dto;
 			
 			}
@@ -152,6 +167,72 @@ public class BoardDAO {
 		try {
 			
 			String sql = "update tblBoard set readcount = readcount + 1 where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			rs = pstat.executeQuery();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+	}
+
+	
+	
+	//EditOk 서블릿 -> 글 수정해달라고 요청
+	public int edit(BoardDTO dto) {
+		
+		try {
+
+			String sql = "update tblBoard set subject = ?, content = ? where seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSubject());
+			pstat.setString(2, dto.getContent());
+			pstat.setString(3, dto.getSeq());	//글 번호
+
+			return pstat.executeUpdate(); // 1 or 0
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return 0;
+
+	}
+
+	
+	
+	//DeleteOk 서블릿 -> 글 삭제하기
+	public int del(String seq) {
+		
+		try {
+
+			String sql = "delete from tblBoard where seq = ?";
+
+			pstat = conn.prepareStatement(sql);	
+			pstat.setString(1, seq);	//글 번호
+
+			return pstat.executeUpdate(); // 1 or 0
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return 0;
+	}
+
+	
+	
+	//다운로드 횟수 증가 (반환값 없음) = 조회수 증가시키는것과 비슷
+	public void updateDownloadcount(String seq) {
+		
+		try {
+			
+			String sql = "update tblBoard set downloadcount = downloadcount + 1 where seq = ?";
 			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);

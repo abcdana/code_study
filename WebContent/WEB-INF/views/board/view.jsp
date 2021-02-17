@@ -73,23 +73,35 @@
                 <table class="table view">
                     <tr>
                         <td>
-                            <span class="seq">${dto.seq }.</span>
-                            <span class="subject">${dto.subject }.</span>
-                            <span class="readcount">읽음(${dto.readcount })</span>
-                            <span class="date">${dto.regdate }</span>
-                            <span class="name">홍길동(hong)</span>
+                            <span class="seq">${dto.seq}.</span>
+                            <span class="subject">${dto.subject}.</span>
+                            <span class="readcount">읽음(${dto.readcount})</span>
+                            <span class="date">${dto.regdate}</span>
+                            <span class="name">${dto.name}{${dto.id})</span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="content">${dto.content }</td>
+                        <td class="content">
+                        	
+                        	<c:if test="${dto.filename.toLowerCase().endsWith('jpg') || dto.filename.toLowerCase().endsWith('gif') || dto.filename.toLowerCase().endsWith('png')}">
+                        	<img src="/codestudy/files/${dto.filename }" style="display: block; margin: 20px auto;">
+                        	</c:if>
+                        	
+                        	${dto.content}
+                        
+                        </td>
                     </tr>
-                    <!-- 
+                    
+                    <c:if test="${not empty dto.orgfilename }">
                     <tr>
                         <td>
-                            <span class="glyphicon glyphicon-floppy-disk"></span> test.zip
+                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                            <a href="/codestudy/board/download.do?filename=${dto.filename }&orgfilename=${dto.orgfilename}&seq=${dto.seq}">${dto.orgfilename }</a>
+                            [download: ${dto.downloadcount }회]
                         </td>
                     </tr>
-                     -->
+                    </c:if>
+                    
                     <!-- 
                     <tr>
                         <td>
@@ -111,14 +123,19 @@
                     
                     
                     <c:if test="${not empty id }">
-                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/edit.do';">
+                    
+                    <c:if test="${dto.id.equals(id)}">
+                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/edit.do?seq=${dto.seq}';">
                         <span class="glyphicon glyphicon-minus"></span>
                         수정
                     </button>
-                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/delete.do';">
+                    
+                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/delete.do?seq=${dto.seq}';">
                         <span class="glyphicon glyphicon-remove"></span>
                         삭제
                     </button>
+                    </c:if>
+                    
                     <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/reply.do';">
                         <span class="glyphicon glyphicon-share-alt"></span>
                         답변
@@ -179,6 +196,15 @@
 	
 	<script>
     
+		$(".content img").ready(function() {
+			//alert($(".content img").width();
+		
+			if ($(".content img").width() > 600) {
+				$(".content img").width(600);
+			}
+		});
+		
+	
     </script>
 </body>
 

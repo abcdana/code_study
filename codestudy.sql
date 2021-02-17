@@ -43,6 +43,6 @@ from tblBoard;
 
 select * from vwBoard where name like '%검색어%' or subject like '%검색어%' or content like '%검색어%';
 
+select b.*, (select name from tblMember where seq = b.mseq) as name, (select id from tblMember where seq = b.seq) as id from tblBoard b;
 
-
-
+select * from tblMember;

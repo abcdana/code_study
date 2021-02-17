@@ -100,12 +100,26 @@
                     </thead>
                     <tbody>
                         
+                        
+                        <c:if test="${list.size() == 0 }">
+                        <tr>
+                        	<td colspan="5" style="text-align:center;">게시물이 없습니다.</td>
+                        </tr>
+                        </c:if>
+                        
+                        
                         <c:forEach items="${list}" var="dto">
                         <tr>
                             <td>1</td>
                             <td>
                             	<a href="/codestudy/board/view.do?seq=${dto.seq }&search=${search}">${dto.subject}</a>
                             	
+                            	<!-- 첨부파일 유무 표시 -->
+                            	<c:if test="${not empty dto.filename }">
+                            		<span class="glyphicon glyphicon-floppy-disk"></span>
+                            	</c:if>
+                            	
+                            	<!-- 최신글 표시 -->
                             	<c:if test="${dto.gap < 1 }">
                             		<span class="label label-danger">new</span>
                             	</c:if>

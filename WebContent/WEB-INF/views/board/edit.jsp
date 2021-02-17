@@ -65,25 +65,25 @@
 			<div>
 				<h1>자유 게시판 <small>Board</small></h1>
                 
-				<form method="POST" action="/codestudy/board/writeok.do" enctype="multipart/form-data">
+				<form method="POST" action="/codestudy/board/editok.do">
                 <table class="table write">
                     <tr>
                         <td>
-                            <input type="text" class="form-control"  placeholder="subject" id="subject" name="subject">
+                            <input type="text" class="form-control"  placeholder="subject" id="subject" name="subject" required value="${dto.subject}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <textarea class="form-control" id="content" name="content" placeholder="content"></textarea>
+                            <textarea class="form-control" id="content" name="content" placeholder="content" required>${dto.content}</textarea>
                         </td>
                     </tr>
-                  
+                    <!-- 
                     <tr>
                         <td>
-                            <input type="file" class="form-control" placeholder="file" id="file" name="attach">
+                            <input type="file" class="form-control" placeholder="file" id="file">
                         </td>
                     </tr>
-                    
+                     -->
                 </table>
 				
 
@@ -99,6 +99,11 @@
                         쓰기
                     </button>
                 </div>
+                
+                
+                <input type="hidden" name="seq" value="${dto.seq}">
+                
+                
                 </form>
                 
                 <div style="clear:both;"></div>
