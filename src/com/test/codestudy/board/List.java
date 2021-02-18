@@ -45,6 +45,44 @@ public class List extends HttpServlet {
 		
 		
 		
+		//페이징
+		int nowPage = 0;		//현재 페이지 번호
+		int totalCount = 0;		//총 게시물 수 
+		int pageSize = 10;		//한 페이지당 출력 개수
+		int totalPage = 0;		//총 페이지 수
+		int begin = 0;			//rnum 시작번호
+		int end = 0;			//rnum 끝번호
+		int n = 0;				//페이지바 관련 변수
+		int loop = 0;			//페이지바 관련 변수
+		int blockSize = 10;		//페이지바 관련 변수
+		
+		//list.do
+		//list.do -> list.do?page=1 : 1페이지 보여줘
+		//list.do -> list.do?page=2 : 2페이지 보여줘
+		
+		String page = request.getParameter("page");
+		
+		if (page == null || page == "") {
+			//기본 -> page = 1
+			nowPage = 1;
+		} else {
+			nowPage = Integer.parseInt(page);
+		}
+		
+		// 이 이후로는 nowPage가 현재 보려는 페이지 번호다!!
+		//1page -> where rnum between 1 and 10
+		//2page -> where rnum between 11 and 20
+		//3page -> where rnum between 21 and 30
+		
+		begin = ((nowPage - 1) * pageSize) + 1;
+		end = begin + pageSize - 1;
+		
+		//HashMap에 정보를 넘겨
+		map.put("begin", begin + "");
+		map.put("end", end + "");
+		
+		
+		
 		//1.
 		BoardDAO dao = new BoardDAO();
 		
@@ -71,9 +109,55 @@ public class List extends HttpServlet {
 		
 		
 		
+		
+		//페이지바 만들기 -> 서블릿에서 동적으로 만들기!
+		/*
+        <li>
+            <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li><a href="/codestudy/board/list.do">1</a></li>
+        <li>
+            <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li> 
+		*/
+		
+		
+		//총 페이지 수 계산하기
+		//총 게시물 수 = 269개
+		//총 페이지 수 = 269 / 10 -> 26.9페이지 -올림-> 28페이지 (무조건 올림 : ceiling함수)
+		
+		totalCount = dao.getTotalCount(map); //총 게시물 수
+		System.out.println(totalCount);		//269개
+		
+		//totalPage = totalCount / pageSize + 1; //총 페이지 수
+		totalPage = (int)Math.ceil((double)totalCount / pageSize); //총 페이지 수
+		System.out.println(totalPage);		//26페이지 -(ceil)-> 27페이지
+		
+		
+		String pagebar = "";
+		
+		for (int i=1; i<=totalPage; i++) {
+			
+			if (nowPage == i) {
+				pagebar += "<li class='active'>";
+			} else {
+				pagebar += "<li>";
+			}
+			
+			
+			pagebar += String.format("<a href=\"/codestudy/board/list.do?page=%d\">%d</a></li>", i, i);
+		}
+		
+		
+		
 		//2. 
 		request.setAttribute("list", list);
 		request.setAttribute("search", search);
+		request.setAttribute("pagebar", pagebar);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
 		dispatcher.forward(request, response);

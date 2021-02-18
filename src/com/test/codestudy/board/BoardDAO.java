@@ -75,7 +75,10 @@ public class BoardDAO {
 			
 			//String sql = String.format("select * from vwBoard %s order by seq desc", where);
 			
-			String sql = String.format("select * from (select a.*, rownum as rnum from (select * from vwBoard %s order by seq desc) a) where rnum between 1 and 10", where);
+			String sql = String.format("select * from (select a.*, rownum as rnum from (select * from vwBoard %s order by seq desc) a) where rnum between %s and %s"
+					, where
+					, map.get("begin")
+					, map.get("end"));
 			
 			//System.out.println(sql);
 			
@@ -246,6 +249,41 @@ public class BoardDAO {
 			System.out.println(e);
 		}
 		
+	}
+
+	
+	
+	//총 게시물 수 를 세는 메서드
+	//List 서블릿 -> 총 게시물 수 반환
+	public int getTotalCount(HashMap<String, String> map) {
+
+		try {
+
+			String where = "";
+
+			if (map.get("search") != null) {
+				// 검색중...
+				where = String.format("where name like '%%%s%%' or subject like '%%%s%%' or content like '%%%s%%'",
+						map.get("search"), map.get("search"), map.get("search"));
+			}
+			
+			
+			String sql = String.format("select count(*) as cnt from tblBoard %s", where);
+			
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+			
+			
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+			
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return 0;
 	}
 
 

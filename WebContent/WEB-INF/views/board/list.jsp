@@ -144,21 +144,7 @@
  				
                 <nav class="pagebar">
                     <ul class="pagination">
-                        <li>
-                            <a href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li><a href="/codestudy/board/list.do">1</a></li>
-                        <li><a href="/codestudy/board/list.do">2</a></li>
-                        <li class="active"><a href="/codestudy/board/list.do">3</a></li>
-                        <li><a href="/codestudy/board/list.do">4</a></li>
-                        <li><a href="/codestudy/board/list.do">5</a></li>
-                        <li>
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
+						${pagebar }
                     </ul>
                 </nav>
 
