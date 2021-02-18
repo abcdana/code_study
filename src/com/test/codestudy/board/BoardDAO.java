@@ -73,7 +73,9 @@ public class BoardDAO {
 				where = String.format("where name like '%%%s%%' or subject like '%%%s%%' or content like '%%%s%%'", map.get("search"), map.get("search"), map.get("search"));
 			}
 			
-			String sql = String.format("select * from vwBoard %s order by seq desc", where);
+			//String sql = String.format("select * from vwBoard %s order by seq desc", where);
+			
+			String sql = String.format("select * from (select a.*, rownum as rnum from (select * from vwBoard %s order by seq desc) a) where rnum between 1 and 10", where);
 			
 			//System.out.println(sql);
 			
