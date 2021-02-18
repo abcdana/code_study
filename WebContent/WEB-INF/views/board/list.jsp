@@ -112,7 +112,7 @@
                         <tr>
                             <td>1</td>
                             <td>
-                            	<a href="/codestudy/board/view.do?seq=${dto.seq }&search=${search}">${dto.subject}</a>
+                            	<a href="/codestudy/board/view.do?seq=${dto.seq }&search=${search}&page=${nowPage}">${dto.subject}</a>
                             	
                             	<!-- 첨부파일 유무 표시 -->
                             	<c:if test="${not empty dto.filename }">

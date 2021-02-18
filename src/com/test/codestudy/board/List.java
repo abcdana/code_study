@@ -220,6 +220,7 @@ public class List extends HttpServlet {
 		request.setAttribute("list", list);
 		request.setAttribute("search", search);
 		request.setAttribute("pagebar", pagebar);
+		request.setAttribute("nowPage", nowPage);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
 		dispatcher.forward(request, response);

@@ -28,6 +28,7 @@ public class View extends HttpServlet {
 		String seq = request.getParameter("seq");
 		String search = request.getParameter("search"); //검색어
 		
+		String page = request.getParameter("page"); //왜받았냐??? view.jsp 한테 넘기기 위해!
 		
 		//2.
 		BoardDAO dao = new BoardDAO();
@@ -57,6 +58,7 @@ public class View extends HttpServlet {
 		request.setAttribute("dto", dto);
 		request.setAttribute("search", search);
 		
+		request.setAttribute("page", page); //페이지 번호 view.jsp한테 넘겨주자
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/view.jsp");
 		dispatcher.forward(request, response);
