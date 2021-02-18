@@ -140,18 +140,80 @@ public class List extends HttpServlet {
 		
 		String pagebar = "";
 		
-		for (int i=1; i<=totalPage; i++) {
-			
-			if (nowPage == i) {
+//		for (int i=1; i<=totalPage; i++) {
+//			
+//			if (nowPage == i) {
+//				pagebar += "<li class='active'>";
+//			} else {
+//				pagebar += "<li>";
+//			}
+//			
+//			
+//			pagebar += String.format("<a href=\"/codestudy/board/list.do?page=%d\">%d</a></li>", i, i);
+//		}
+		
+		
+		loop = 1;
+		//n = 1;
+		n = ((nowPage - 1) / blockSize) * blockSize + 1;
+		
+		//list.do?page=1
+		//1 2 3 4 5 6 7 8 9 10
+		
+		//list.do?page=3
+		//1 2 3 4 5 6 7 8 9 10
+		
+		//list.do?page=11
+		//11 12 13 14 15 16 17 18 19 20
+		
+		
+		//이전 10페이지로
+		if(n == 1) {
+			pagebar += String.format("<li class='disabled'>"
+						+ "            <a href=\"#!\" aria-label=\"Previous\">"
+						+ "                <span aria-hidden=\"true\">&laquo;</span>"
+						+ "            </a>"
+						+ "         </li>");
+		} else {
+			pagebar += String.format("<li>"
+						+ "            <a href=\"/codestudy/board/list.do?page=%d\" aria-label=\"Previous\">"
+						+ "                <span aria-hidden=\"true\">&laquo;</span>"
+						+ "            </a>"
+						+ "         </li>", n - 1);			
+		}
+		
+		
+		
+		while (!(loop > blockSize || n > totalPage)) {
+
+			if (nowPage == n) {
 				pagebar += "<li class='active'>";
 			} else {
 				pagebar += "<li>";
 			}
-			
-			
-			pagebar += String.format("<a href=\"/codestudy/board/list.do?page=%d\">%d</a></li>", i, i);
+			pagebar += String.format("<a href=\"/codestudy/board/list.do?page=%d\">%d</a></li> ", n, n);
+
+			loop++;
+			n++;
+
 		}
 		
+		
+		//다음 10페이지로 이동
+		if (n > totalPage) {
+			pagebar += String.format("<li class='disabled'>"
+						+ "            <a href=\"#!\" aria-label=\"Next\">"
+						+ "                <span aria-hidden=\"true\">&raquo;</span>"
+						+ "            </a>"
+						+ "          </li> ");
+			//a href = "#" 본인 페이지 항상 위, "#!" 위로 올라가는 현상 사라짐
+		} else {
+			pagebar += String.format("<li>"
+					+ "            <a href=\"/codestudy/board/list.do?page=%d\" aria-label=\"Next\">"
+					+ "                <span aria-hidden=\"true\">&raquo;</span>"
+					+ "            </a>"
+					+ "          </li> ", n);
+		}
 		
 		
 		//2. 
