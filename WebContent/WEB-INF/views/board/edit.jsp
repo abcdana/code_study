@@ -69,12 +69,12 @@
                 <table class="table write">
                     <tr>
                         <td>
-                            <input type="text" class="form-control"  placeholder="subject" id="subject" name="subject" required value="${dto.subject}">
+                            <input type="text" class="form-control" placeholder="subject" id="subject" name="subject" required value='${dto.subject.replace("\"", "&quot;")}'>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <textarea class="form-control" id="content" name="content" placeholder="content" required>${dto.content}</textarea>
+                            <textarea class="form-control" id="content" placeholder="content" name="content" required>${dto.content}</textarea>
                         </td>
                     </tr>
                     <!-- 
@@ -85,7 +85,7 @@
                     </tr>
                      -->
                 </table>
-				
+
 
                 <div style="clear:both;"></div>
 
@@ -94,18 +94,15 @@
                         <span class="glyphicon glyphicon-chevron-left"></span>
                         뒤로
                     </button>
-                    <button type="submit" class="btn btn-default" >
+                    <button type="submit" class="btn btn-default">
                         <span class="glyphicon glyphicon-plus"></span>
                         쓰기
                     </button>
                 </div>
                 
-                
                 <input type="hidden" name="seq" value="${dto.seq}">
                 
-                
                 </form>
-                
                 <div style="clear:both;"></div>
 			</div>
 		</div>

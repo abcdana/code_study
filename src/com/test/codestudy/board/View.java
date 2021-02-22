@@ -1,6 +1,7 @@
 package com.test.codestudy.board;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,6 +43,11 @@ public class View extends HttpServlet {
 		
 		BoardDTO dto = dao.get(seq);
 		
+		//댓글 목록 가져오기
+		//현재 보고 있는 글에 달려있는 댓글 목록 가져오기
+		ArrayList<CommentDTO> clist = dao.listComment(seq); 
+		
+		
 		dao.close(); //******빼먹으면 db가 죽는다.
 		
 		//여기서 조회수 증가를 하면 내가 읽은 것은 빼고 반영
@@ -59,6 +65,8 @@ public class View extends HttpServlet {
 		request.setAttribute("search", search);
 		
 		request.setAttribute("page", page); //페이지 번호 view.jsp한테 넘겨주자
+		
+		request.setAttribute("clist", clist);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/view.jsp");
 		dispatcher.forward(request, response);

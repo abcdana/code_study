@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.test.codestudy.DBUtil;
 
@@ -117,6 +118,46 @@ public class MemberDAO {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+		
+		return null;
+	}
+
+
+	
+	
+	//Send 서블릿 -> 나 빼고 다른 사람(회원)들을 모두 반환
+	public ArrayList<MemberDTO> listMember(String seq) {
+
+		try {
+			
+			String sql = "select seq, name, id from tblMember where seq <> ? order by name asc";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			rs = pstat.executeQuery();
+			
+			
+			ArrayList<MemberDTO> mlist = new ArrayList<MemberDTO>();
+			
+			while (rs.next()) {
+				//레코드 1줄 -> DTO 1개
+				MemberDTO dto = new MemberDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setId(rs.getString("id"));
+
+				mlist.add(dto);
+			}
+			
+			return mlist;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
 		
 		return null;
 	}

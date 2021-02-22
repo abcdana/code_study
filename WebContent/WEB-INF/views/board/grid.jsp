@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>	
+	
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,22 +16,21 @@
 <style>
 
 	.item {
-		width: 180px;
+		width: 250px;
 		margin: 10px;
 		float: left;
 	}
-	
 	.item > div:nth-child(2) {
 		height: 200px;
 		background-repeat: no-repeat;
-		background-size: 75px 75px;
+		background-size: 120px 120px;
 		background-position: right bottom;
+		overflow: hidden;
 	}
-	
 	.item > div:nth-child(3) {
 		text-align: right;
 	}
-	
+
 </style>
 </head>
 
@@ -86,35 +84,35 @@
 			
 				<h1>자유 게시판 <small>Board</small></h1>
 				
-				<c:if test="${not empty search }">
+				
+				<c:if test="${not empty search}">
                 <div class="message well well-sm">
-                    '${search }'(으)로 ${list.size() }건의 게시물을 검색했습니다.
+                    '${search}'(으)로 ${list.size()}건의 게시물을 검색했습니다.
                 </div>
-               	</c:if>
-                 
-                <!-- 상태유지를 위해서 검색은 주로 GET방식을 사용한다. --> 
+                </c:if>
+                
+                
+                <!-- 검색은 주로 GET을 사용한다.(상태 유지를 위해서) -->
                 <form id="searchForm" method="GET" action="/codestudy/board/list.do">
                 <div class="input-group search">
                 
-                    <input type="text" class="form-control" id="search" name="search" placeholder="" aria-describedby="basic-addon2" required value="${search }">
+                    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon2" id="search" name="search" required value="${search}">
                     
                     <span class="input-group-addon" id="basic-addon2" style="cursor:pointer;" onclick="$('#searchForm').submit();"><span class="glyphicon glyphicon-search"></span></span>
                 </div>
-                </form> 
-                
+                </form>
                 <div style="clear:both;"></div>
-                 
                 
-               <c:forEach items="${list}" var="dto">
-	               <div class="item panel panel-default">
-	                  <div class="panel-heading">${dto.subject }</div>
-	                  <div class="panel-body" style="background-image:url(/codestudy/pic/nopic.png)">${dto.subject}</div>
-	                  <div class="panel-footer">${dto.name}(${dto.regdate.substring(0,10)})</div>
-	               </div>
-               </c:forEach>
-               <div style="clear:both"></div>
-				
-
+                <c:forEach items="${list}" var="dto">
+                <div class="item panel panel-default">
+                	<div class="panel-heading">${dto.subject}</div>
+                	<div class="panel-body" style="background-image:url(/codestudy/pic/${dto.pic});">${dto.content}</div>
+                	<div class="panel-footer">${dto.name}(${dto.regdate.substring(0,10)})</div>
+                </div>
+                </c:forEach>
+                <div style="clear:both"></div>
+                
+                
 				<!-- 
                 <div class="btn-group fbtns" role="group" aria-label="...">
                     <button type="button" class="btn btn-default active"><span class="glyphicon glyphicon-th-list"></span></button>
@@ -125,9 +123,10 @@
  				
                 <nav class="pagebar">
                     <ul class="pagination">
-						${pagebar }
+                        ${pagebar}
                     </ul>
                 </nav>
+                
 
                 <div style="clear:both;"></div>
 
@@ -137,14 +136,14 @@
                         목록
                     </button>
                     
-                    
-                    <!-- 로그인을 했을때만 이 버튼을 보여주기 -->
-                    <c:if test="${not empty id }">
+                    <!-- 로그인 O -> 버튼 출력 -->
+                    <c:if test="${not empty id}">
                     <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/write.do';">
                         <span class="glyphicon glyphicon-plus"></span>
                         쓰기
                     </button>
                     </c:if>
+                    
                     
                 </div>
                 <div style="clear:both;"></div>

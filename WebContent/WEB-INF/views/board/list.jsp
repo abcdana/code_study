@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>	
+	
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,24 +68,25 @@
 			
 				<h1>자유 게시판 <small>Board</small></h1>
 				
-				<c:if test="${not empty search }">
+				
+				<c:if test="${not empty search}">
                 <div class="message well well-sm">
-                    '${search }'(으)로 ${list.size() }건의 게시물을 검색했습니다.
+                    '${search}'(으)로 ${list.size()}건의 게시물을 검색했습니다.
                 </div>
-               	</c:if>
-                 
-                <!-- 상태유지를 위해서 검색은 주로 GET방식을 사용한다. --> 
+                </c:if>
+                
+                
+                <!-- 검색은 주로 GET을 사용한다.(상태 유지를 위해서) -->
                 <form id="searchForm" method="GET" action="/codestudy/board/list.do">
                 <div class="input-group search">
                 
-                    <input type="text" class="form-control" id="search" name="search" placeholder="" aria-describedby="basic-addon2" required value="${search }">
+                    <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon2" id="search" name="search" required value="${search}">
                     
                     <span class="input-group-addon" id="basic-addon2" style="cursor:pointer;" onclick="$('#searchForm').submit();"><span class="glyphicon glyphicon-search"></span></span>
                 </div>
-                </form> 
-                
+                </form>
                 <div style="clear:both;"></div>
-                 
+                
                 
                 <table class="table table-hover list">
                     <thead>
@@ -99,28 +99,41 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
-                        
-                        <c:if test="${list.size() == 0 }">
-                        <tr>
-                        	<td colspan="5" style="text-align:center;">게시물이 없습니다.</td>
-                        </tr>
-                        </c:if>
-                        
-                        
-                        <c:forEach items="${list}" var="dto">
+                    	
+                    	<c:if test="${list.size() == 0}">
+                    	<tr>
+                    		<td colspan="5" style="text-align:center;">게시물이 없습니다.</td>
+                    	</tr>
+                    	</c:if>
+                    	
+                    	<c:forEach items="${list}" var="dto">
                         <tr>
                             <td>1</td>
                             <td>
-                            	<a href="/codestudy/board/view.do?seq=${dto.seq }&search=${search}&page=${nowPage}">${dto.subject}</a>
                             	
-                            	<!-- 첨부파일 유무 표시 -->
-                            	<c:if test="${not empty dto.filename }">
+                            	
+                            	<a href="/codestudy/board/view.do?seq=${dto.seq}&search=${search}&page=${nowPage}" 
+                       	style="margin-left: ${dto.depth * 30}px;">
+                       			
+                       			<c:if test="${dto.depth > 0}">
+                       			<span class="glyphicon glyphicon-share-alt"></span>
+                       			</c:if>
+                       			${dto.subject}
+                       			
+                       			</a>
+                            	
+                            	<!-- 첨부파일 유무 -->
+                            	<c:if test="${not empty dto.filename}">
                             		<span class="glyphicon glyphicon-floppy-disk"></span>
                             	</c:if>
                             	
-                            	<!-- 최신글 표시 -->
-                            	<c:if test="${dto.gap < 1 }">
+                            	<!-- 댓글 수 -->
+                            	<c:if test="${dto.ccount > 0}">
+                            	<span class="badge">${dto.ccount}</span>
+                            	</c:if>
+                            	
+                            	<!-- 최신글 -->
+                            	<c:if test="${dto.gap < 1}">
                             		<span class="label label-danger">new</span>
                             	</c:if>
                             	
@@ -129,8 +142,7 @@
                             <td>${dto.regdate}</td>
                             <td>${dto.readcount}</td>
                         </tr>
-                     	</c:forEach>
-                     	
+                        </c:forEach>
                     </tbody>
                 </table>
 
@@ -144,9 +156,10 @@
  				
                 <nav class="pagebar">
                     <ul class="pagination">
-						${pagebar }
+                        ${pagebar}
                     </ul>
                 </nav>
+                
 
                 <div style="clear:both;"></div>
 
@@ -156,14 +169,14 @@
                         목록
                     </button>
                     
-                    
-                    <!-- 로그인을 했을때만 이 버튼을 보여주기 -->
-                    <c:if test="${not empty id }">
-                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/write.do';">
+                    <!-- 로그인 O -> 버튼 출력 -->
+                    <c:if test="${not empty id}">
+                    <button type="button" class="btn btn-default" onclick="location.href='/codestudy/board/write.do?reply=n';">
                         <span class="glyphicon glyphicon-plus"></span>
                         쓰기
                     </button>
                     </c:if>
+                    
                     
                 </div>
                 <div style="clear:both;"></div>

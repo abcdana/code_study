@@ -222,7 +222,7 @@ public class List extends HttpServlet {
 		request.setAttribute("pagebar", pagebar);
 		request.setAttribute("nowPage", nowPage);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/grid.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
 		dispatcher.forward(request, response);
 		
 	}

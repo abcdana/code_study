@@ -39,23 +39,26 @@ public class BoardDAO {
 	public int write(BoardDTO dto) {
 
 		try {
-
-			String sql = "insert into tblBoard (seq, subject, content, regdate, readcount, mseq, filename, orgfilename) values (seqBoard.nextVal, ?, ?, default, default, ?, ?, ?)";
-
+			
+			String sql = "insert into tblBoard (seq, subject, content, regdate, readcount, mseq, filename, orgfilename, thread, depth) values (seqBoard.nextVal, ?, ?, default, default, ?, ?, ?, ?, ?)";
+			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getSubject());
 			pstat.setString(2, dto.getContent());
 			pstat.setString(3, dto.getMseq());
-
+			
 			pstat.setString(4, dto.getFilename());
 			pstat.setString(5, dto.getOrgfilename());
-
-			return pstat.executeUpdate(); // 1 or 0
-
+			
+			pstat.setInt(6, dto.getThread());
+			pstat.setInt(7, dto.getDepth());
+			
+			return pstat.executeUpdate(); //1 or 0
+			
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-
+		
 		return 0;
 
 	}
@@ -104,6 +107,14 @@ public class BoardDAO {
 				
 				dto.setFilename(rs.getString("filename")); //파일명
 				
+				dto.setPic(rs.getString("pic"));
+				
+				dto.setContent(rs.getString("content"));
+				
+				dto.setCcount(rs.getString("ccount")); //댓글 수
+				
+				dto.setDepth(rs.getInt("depth")); //답변형
+				
 				list.add(dto); //***잘 빼먹는 부분 : 에러메세지 안뜨니 주의할 것
 				
 			}
@@ -129,7 +140,6 @@ public class BoardDAO {
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
 			
-			
 			rs = pstat.executeQuery();
 			
 			if (rs.next()) {
@@ -149,19 +159,20 @@ public class BoardDAO {
 				dto.setFilename(rs.getString("filename"));
 				dto.setOrgfilename(rs.getString("orgfilename"));
 				dto.setDownloadcount(rs.getInt("downloadcount"));
-
 				
-				return dto;
-			
+				dto.setThread(rs.getInt("thread")); //답변용
+				dto.setDepth(rs.getInt("depth"));
+				
+				
+				return dto;				
 			}
 			
-			
 		} catch (Exception e) {
-			// TODO: handle exception
 			System.out.println(e);
 		}
 		
 		return null;
+
 	}
 
 	
@@ -284,6 +295,129 @@ public class BoardDAO {
 		}
 
 		return 0;
+	}
+	
+	
+	//CommentOk 서블릿 -> 댓글 쓰기
+	public int writeComment(CommentDTO dto) {
+		
+		try {
+			
+			String sql = "insert into tblComment (seq, ccontent, regdate, mseq, bseq) values (seqComment.nextVal, ?, default, ?, ?)";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getCcontent());
+			pstat.setString(2, dto.getMseq());
+			pstat.setString(3, dto.getBseq());
+			
+			return pstat.executeUpdate(); //1 or 0
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return 0;
+		
+	}
+
+	
+	//View 서블릿 -> 댓글 목록
+	public ArrayList<CommentDTO> listComment(String seq) {
+		
+		try {
+			
+			String sql = "select c.*, (select name from tblMember where seq = c.mseq) as name, (select id from tblMember where seq = c.mseq) as id from tblComment c where c.bseq = ? order by c.seq desc";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);//부모 글번호
+			
+			rs = pstat.executeQuery();
+			
+			ArrayList<CommentDTO> clist = new ArrayList<CommentDTO>();
+			
+			while (rs.next()) {
+				//레코드 1개 -> DTO 1개
+				CommentDTO dto = new CommentDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setCcontent(rs.getString("ccontent"));
+				dto.setRegdate(rs.getString("regdate"));
+				dto.setMseq(rs.getString("mseq"));
+				dto.setBseq(rs.getString("bseq"));
+				dto.setName(rs.getString("name"));
+				dto.setId(rs.getString("id"));
+				
+				clist.add(dto);				
+			}
+			
+			return clist;
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return null;
+	}
+
+	
+	public int deleteComment(String seq) {
+		
+		try {
+			
+			String sql = "delete from tblComment where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			return pstat.executeUpdate(); //1 or 0
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return 0;
+	}
+
+	
+	//WriteOk 서블릿 -> 가장 큰 thread값 + 1000 반환
+	public int getThread() {
+		
+		try {
+			
+			String sql = "select nvl(max(thread), 0) + 1000 as thread from tblBoard";
+			
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+			
+			if (rs.next()) {
+				return rs.getInt("thread");
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return 0;
+	}
+
+	
+	//WriteOk 서블릿
+	public void updateThead(HashMap<String, Integer> map) {
+		
+		try {
+			//a. 게시물의 모든 thread 값 중 답변글의 부모글 thread 값보다 작고, 이전 새글의 thread 값보다 큰 글들을 모두 찾아서 thread - 1 업데이트 한다.
+			String sql = "update tblBoard set thread = thread - 1 where thread < ? and thread > ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, map.get("parentThread"));
+			pstat.setInt(2, map.get("previousThread"));
+			
+			pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
 	}
 
 
