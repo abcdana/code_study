@@ -20,7 +20,7 @@
 
 		<!-- 로그인 한 유저 -->
 		<c:if test="${not empty id}">
-			<span>
+			<span id="message">
 				<span class="glyphicon glyphicon-envelope"></span> 
 				<a href="/codestudy/member/message.do">쪽지</a>
 			</span>
@@ -28,6 +28,28 @@
 				<span class="glyphicon glyphicon-lock"></span> 
 				<a href="/codestudy/member/logout.do">로그아웃</a>
 			</span>
+			
+			
+			<script>
+				<c:if test="${count > 0}">
+					
+					var flag = false;
+					
+					setInterval(function(){
+						
+						if (flag) {
+							$("#message").css("opacity", "1");
+						} else {
+							$("#message").css("opacity", ".1");
+						}
+						
+						flag = !flag;
+						
+					}, 500);
+				
+				</c:if>
+			</script>
+			
 		</c:if>		
 
 

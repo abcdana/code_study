@@ -161,5 +161,175 @@ public class MemberDAO {
 		
 		return null;
 	}
+
+
+
+	public int send(MessageDTO dto) {
+		
+		try {
+			
+			int result = 0;
+			
+			String sql = "insert into tblMessage (seq, smseq, rmseq, content, regdate, state) values (seqMessage.nextVal, ?, ?, ?, default, default)";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setNString(1, dto.getSmseq());
+			pstat.setNString(3, dto.getContent());
+			
+			for (String rmseq : dto.getRmseq()) {
+				pstat.setString(2, rmseq); //받는 회원 번호들을 순차적으로 대입
+				result += pstat.executeUpdate();
+			}
+			
+			return result;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+		return 0;
+	}
+
+
+
+	//Message 서블릿 -> 본인에게 온 쪽지 목록
+	public ArrayList<MessageDTO> listMessage(String rmseq) {
+	      
+	      try {
+	         
+	         String sql = "select m.*, (select name from tblMember where seq = m.smseq) as name, (select id from tblMember where seq = smseq) as id from tblMessage m where rmseq = ? order by seq desc";
+	         
+	         pstat = conn.prepareStatement(sql);
+	         pstat.setString(1,  rmseq);
+	         rs = pstat.executeQuery();
+	         
+	         ArrayList<MessageDTO> list = new ArrayList<MessageDTO>();
+	         
+	         while (rs.next()) {
+	            MessageDTO dto = new MessageDTO();
+	            
+	            dto.setSeq(rs.getString("seq"));
+	            dto.setSmseq(rs.getString("smseq"));
+	            dto.setRmseq(new String[] {rs.getString("rmseq") });
+	            dto.setContent(rs.getString("content"));
+	            dto.setRegdate(rs.getString("regdate"));
+	            dto.setState(rs.getString("state"));
+	            dto.setSname(rs.getString("name"));
+	            dto.setSid(rs.getString("id"));
+	            
+	            list.add(dto);
+	         }
+	         
+	         return list;
+	         
+	      } catch (Exception e) {
+	         System.out.println(e);
+	      }
+	      
+	      return null;
+	   }
+
+
+
+	//View 서블릿 -> 쪽지 1개 반환
+	public MessageDTO getMessage(String seq) {
+
+		try {
+			
+			String sql = "select m.*, (select name from tblMember where seq = m.smseq) as name, (select id from tblMember where seq = smseq) as id from tblMessage m where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
+			
+			MessageDTO dto = new MessageDTO();
+			
+			if (rs.next()) {
+	            dto.setSeq(rs.getString("seq"));
+	            dto.setSmseq(rs.getString("smseq"));
+	            dto.setRmseq(new String[] {rs.getString("rmseq") });
+	            dto.setContent(rs.getString("content"));
+	            dto.setRegdate(rs.getString("regdate"));
+	            dto.setState(rs.getString("state"));
+	            dto.setSname(rs.getString("name"));
+	            dto.setSid(rs.getString("id"));
+	            
+	            return dto;
+			} 
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		
+		return null;
+	}
+
+
+	//Header 서블릿 -> 나에게 온 쪽지 개수??
+	public int getCountMessage(String mseq) {
+
+		try {
+			
+			String sql = "select count(*) as cnt from tblMessage where rmseq = ? and state = 0";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, mseq);
+			rs = pstat.executeQuery();
+			
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+					
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+		return 0;
+	}
+
+
+
+	public void updateState(String rmseq) {
+		
+		try {
+			
+			String sql = "update tblMessage set state = 1 where rmseq = ? and state = 0"; //확인 안함(0) -> 확인함(1)
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, rmseq);
+			
+			pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+		
+	}
+
+
+	//
+	public void updateRead(String seq) {
+		
+		try {
+			
+			String sql = "update tblMessage set state = 2 where seq = ?"; //확인 안함(0) -> 확인함(1)
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+	}
 	
 }

@@ -14,28 +14,6 @@
 
 <style>
 
-	.message th:nth-child(1) { width: 60px; }
-	.message th:nth-child(2) { width: 120px; }
-	.message th:nth-child(3) { width: auto; }
-	.message th:nth-child(4) { width: 170px; }
-	
-	.message th, .message td { text-align: center; }
-	.message td:nth-child(3) { text-align: left; } 
-
-
-	.message td {
-		text-align: center;
-	}
-	
-	.message td:nth-child(even) {
-		width: 160px;
-	}
-	
-	.message td:nth-child(odd) {
-		width: 50px;
-	}
-	
-	
 
 </style>
 </head>
@@ -89,44 +67,25 @@
          <div>
             <h1>쪽지 <small>Message</small></h1>
                 
-			<!-- 
-			받는 사람 : 누구? -> 얘만 문제
-			보낸 사람 : 나
-			내용 : 입력받기 
-			-->
+			<table class="message table table-bordered">
+				<tr>
+					<th style="width: 200px;">보낸회원</th>
+					<td>${dto.sname}(${dto.sid})</td>
+				</tr>
+				<tr>
+					<th>보낸날짜</th>
+					<td>${dto.regdate}</td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td>${dto.content}</td>
+				</tr>
+			</table>
 			
-			<form method="POST" action="/codestudy/member/sendok.do">
-            
-            <input type="button" id="btnAll" value="모든 회원" class="btn btn-default" style="margin-bottom: 10px;">
-            
-            <table class="message table table-bordered">
-               <tr>
-                  <c:forEach items="${mlist }" var="mdto" varStatus="status">
-                     <td><input type="checkbox" name="mseq" value="${mdto.seq}"></td>
-                     <td>${mdto.name}(${mdto.id})</td>
-                     <c:if test="${(status.index+1) % 4 == 0 }">
-                        </tr>
-                        <tr>
-                     </c:if>
-                  </c:forEach>
-                  
-                  <c:forEach var="i" begin="1" end="${(4-(mlist.size() %4))}">
-                     <td></td>
-                     <td></td>
-                  </c:forEach>
-                  
-               </tr>
-            </table>
-
-            
-            <textarea name="content" id="content" class="form-control" placeholder="쪽지 내용을 입력하세요" style="height: 150px; resize: none;"></textarea>
-            
             <div class="btns">
-                   <button type="button" class="btn btn-default" id="btnSend" onclick="">쪽지 보내기</button>
-                </div>
+                   <button type="button" class="btn btn-default" onclick="location.href='/codestudy/member/message.do'">돌아가기</button>
+            </div>
                 
-            </form>
-            
             <div style="clear:both;"></div>
 
          </div>

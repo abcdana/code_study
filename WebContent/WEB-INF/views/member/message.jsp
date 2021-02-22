@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -83,12 +84,32 @@
             		</tr>
             	</thead>
             	<tbody>
+            	
+            		<c:forEach items="${list}" var="dto">
             		<tr>
-            			<td><input type="checkbox" class="cbDelete" name="cbDelete"></td>
-            			<td>홍길동(hong)</td>
-            			<td>머?쪽지 테스트입니다.</td>
-            			<td>2021-02-22 11:22:33</td>
+            			<td><input type="checkbox" class="cbDelete" name="cbDelete" value="${dto.seq}"></td>
+            			<td>${dto.sname}(${dto.sid})</td>
+            			<td>
+            				
+            				<c:if test="${dto.state == 1 or dto.state == 0}">
+            					<b><a href="/codestudy/member/view.do?seq=${dto.seq}">${dto.content}</a></b>
+            				</c:if>
+            				
+            				<c:if test="${dto.state == 2}">
+            					<a href="/codestudy/member/view.do?seq=${dto.seq}">${dto.content}</a>
+            				</c:if>
+            				
+            			</td>
+            			<td>${dto.regdate}</td>
             		</tr>
+            		</c:forEach>
+            		
+            		<c:if test="${list.size() == 0}">
+            		<tr>
+            			<td colspan="4">받은 쪽지가 없습니다.</td>
+            		</tr>
+            		</c:if>
+            		
             	</tbody>            
             </table>
             
