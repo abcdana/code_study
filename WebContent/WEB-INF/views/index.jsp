@@ -231,7 +231,7 @@
 	        text: '게시물 수'
 	    },
 	    tooltip: {
-	        pointFormat: '{series.name}: <b>{point.percentage:.1f} 개</b>'
+	        pointFormat: '{series.name}: <b>{point.y:.0f} 개</b>'
 	    },
 	    accessibility: {
 	        point: {
@@ -244,7 +244,7 @@
 	            cursor: 'pointer',
 	            dataLabels: {
 	                enabled: true,
-	                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+	                format: '<b>{point.name}</b>: {y:.0f} 개'
 	            }
 	        }
 	    },
@@ -252,21 +252,17 @@
 	        name: '게시물 수',
 	        colorByPoint: true,
 	        data: [
-	        	
+	        
+	        <c:forEach items="${blist}" var="bdto" varStatus="status">
 	        {
-	            name: 'Chrome',
-	            y: 61.41,
-	            sliced: true,
-	            selected: true
+	            name: '${bdto.name}',
+	            y: ${bdto.cnt}
 	        }
 	        
-	        , 
-	        
-	        {
-	            name: 'Internet Explorer',
-	            y: 11.84
-	        }
-	        
+			<c:if test="${status.index < blist.size() - 1}">
+			,
+			</c:if>
+	        </c:forEach>
 	        ]
 	    }]
 	});

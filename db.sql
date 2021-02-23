@@ -229,7 +229,7 @@ select * from tblMessage;
 select count(*) as cnt, mseq, (select name from tblMember where seq = tblBoard.mseq) as name from tblBoard group by mseq;
 
 -- 2. 회원별 댓글 수
-select count(*) as cnt, mseq from tblComment group by mseq;
+select count(*) as cnt, mseq, (select name from tblMember where seq = tblComment.mseq) as name from tblComment group by mseq;
 
 
 
@@ -238,6 +238,7 @@ select count(*) as cnt, mseq from tblComment group by mseq;
 
 
 
+select count(*) as cnt, mseq, (select name from tblMember where seq = tblComment.mseq) as name from tblComment group by mseq having count(*) > 10;
 
 
 

@@ -340,7 +340,7 @@ public class MemberDAO {
 
 		try {
 			
-			String sql = "select count(*) as cnt, mseq, (select name from tblMember where seq = tblBoard.mseq) as name from tblBoard group by mseq";
+			String sql = "select count(*) as cnt, mseq, (select name from tblMember where seq = tblBoard.mseq) as name from tblBoard group by mseq having count(*) > 10";
 			
 			stat = conn.createStatement();
 			rs = stat.executeQuery(sql);
