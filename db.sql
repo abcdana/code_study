@@ -214,3 +214,30 @@ create table tblMessage (
 
 create sequence seqMessage;
 
+
+
+-- 21.02.23 chart
+select * from tblMember;
+select * from tblBoard;
+select * from tblComment;
+select * from tblMessage;
+
+-- 차트 데이터
+-- 회원별 게시물 수, 댓글 수
+
+-- 1. 회원별 게시물 수
+select count(*) as cnt, mseq, (select name from tblMember where seq = tblBoard.mseq) as name from tblBoard group by mseq;
+
+-- 2. 회원별 댓글 수
+select count(*) as cnt, mseq from tblComment group by mseq;
+
+
+
+
+
+
+
+
+
+
+

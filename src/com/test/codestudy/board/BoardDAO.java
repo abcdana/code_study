@@ -107,9 +107,9 @@ public class BoardDAO {
 				
 				dto.setFilename(rs.getString("filename")); //파일명
 				
-				dto.setPic(rs.getString("pic"));
-				
-				dto.setContent(rs.getString("content"));
+//				dto.setPic(rs.getString("pic"));
+//				
+//				dto.setContent(rs.getString("content"));
 				
 				dto.setCcount(rs.getString("ccount")); //댓글 수
 				

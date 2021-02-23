@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.test.codestudy.BarDTO;
 import com.test.codestudy.DBUtil;
+import com.test.codestudy.PiDTO;
 
 //서블릿 X -> 일반 클래스 O
 public class MemberDAO {
@@ -330,6 +332,66 @@ public class MemberDAO {
 			System.out.println(e);
 		}
 		
+	}
+
+
+
+	public ArrayList<BarDTO> getBar() {
+
+		try {
+			
+			String sql = "select count(*) as cnt, mseq, (select name from tblMember where seq = tblBoard.mseq) as name from tblBoard group by mseq";
+			
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+			
+			ArrayList<BarDTO> blist = new ArrayList<BarDTO>();
+			
+			while (rs.next()) {
+				BarDTO dto = new BarDTO();
+				dto.setMseq(rs.getString("mseq"));
+				dto.setName(rs.getString("name"));
+				dto.setCnt(rs.getString("cnt"));
+				blist.add(dto);
+			}
+			
+			return blist;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	}
+
+
+
+	public ArrayList<PiDTO> getPi() {
+		
+		try {
+			
+			String sql = "select count(*) as cnt, mseq, (select name from tblMember where seq = tblComment.mseq) as name from tblComment group by mseq";
+			
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+			
+			ArrayList<PiDTO> plist = new ArrayList<PiDTO>();
+			
+			while (rs.next()) {
+				PiDTO dto = new PiDTO();
+				dto.setMseq(rs.getString("mseq"));
+				dto.setName(rs.getString("name"));
+				dto.setCnt(rs.getString("cnt"));
+				plist.add(dto);
+			}
+			
+			return plist;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
 	}
 	
 }

@@ -27,14 +27,15 @@ public class Dummy {
          conn = DBUtil.open();
          
          //BoardDAO.java -> write()
-         String sql = "insert into tblBoard (seq, subject, content, regdate, readcount, mseq, filename, orgfilename) values (seqBoard.nextVal, ?, ?, default, default, ?, null, null)";
+         String sql = "insert into tblBoard (seq, subject, content, regdate, readcount, mseq, filename, orgfilename, downloadcount, thread, depth) values (seqBoard.nextVal, ?, ?, default, default, ?, null, null, default, ?, 0)";
          
          stat = conn.prepareStatement(sql);
          
-         for (int i=0; i<269; i++) {
+         for (int i=0; i<100; i++) {
             stat.setString(1,  subject[rnd.nextInt(subject.length)]);
             stat.setString(2,  content);
             stat.setString(3,  mseq[rnd.nextInt(mseq.length)]);
+            stat.setInt(4, i*1000);
             
             System.out.println(i + ":" + stat.executeUpdate());
          }
