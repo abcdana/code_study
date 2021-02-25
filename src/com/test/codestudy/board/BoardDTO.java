@@ -24,6 +24,14 @@ public class BoardDTO {
 	private String orgfilename;
 	private int downloadcount;
 	
+	private String pic; //작성자 프로필 사진
+	
+	private String ccount; //현재 글에 달린 댓글 수
+	
+	private int thread;
+	private int depth;	
+	
+	
 	public String getPic() {
 		return pic;
 	}
@@ -48,12 +56,6 @@ public class BoardDTO {
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
-	private String pic; //작성자 프로필 사진
-	
-	private String ccount; //현재 글에 달린 댓글 수
-	
-	private int thread;
-	private int depth;	
 	
 	public String getFilename() {
 		return filename;

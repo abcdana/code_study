@@ -190,7 +190,6 @@ public class BoardDAO {
 			rs = pstat.executeQuery();
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 			System.out.println(e);
 		}
 		
@@ -256,7 +255,7 @@ public class BoardDAO {
 			rs = pstat.executeQuery();
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			System.out.println(e);
 		}
 		
