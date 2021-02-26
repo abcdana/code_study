@@ -85,6 +85,35 @@
             	
             	<hr>
             	<div id="result3"></div>
+            	
+            	<hr>
+            	<select id="selBuseo">
+            		<option value="">부서를 선택하세요.</option>
+            		<c:forEach items="${list}" var="buseo">
+                  	<option value="${buseo}">${buseo}</option>
+                  	</c:forEach>
+               	</select>               
+               	<hr>               
+               	<table id="tblList" class="table table-bordered">
+                  	<thead>
+                     	<tr>
+	                        <th>번호</th>
+	                        <th>이름</th>
+	                        <th>부서</th>
+	                        <th>직위</th>
+	                        <th>급여</th>
+                     	</tr>
+                  	</thead>
+                  	<tbody>
+                    	<tr>
+                        	<td></td>
+	                        <td></td>
+	                        <td></td>
+	                        <td></td>
+	                        <td></td>
+                     	</tr>
+                  	</tbody>
+               	</table>
 
             </div>
          </div>
@@ -208,6 +237,47 @@
            });
         });   
 
+        
+        
+        $("#selBuseo").change(function() {
+        	
+        	if ($(this).val() != ""){
+
+        		$.ajax({
+        			type: "GET",
+        			url: "/codestudy/ajax/ex05jsondata.do",
+        			data: "buseo=" + $(this).val(),
+        			dataType: "json",
+        			success: function(result) {
+        				
+        			$("#tblList tbody").html(""); //초기화
+        				
+	  				$(result).each(function(index, item) {
+	  					
+	   					let temp = "";
+	   				
+	  					temp += "<tr>";
+	  					temp += "<td>" + item.num + "</td>";
+	  					temp += "<td>" + item.name + "</td>";
+	  					temp += "<td>" + item.buseo + "</td>";
+	  					temp += "<td>" + item.jikwi + "</td>";
+	  					temp += "<td>" + item.basicpay + "</td>";
+	  					temp += "</tr>";
+	
+	  					$("#tblList tbody").append(temp);
+	  					
+	  				});
+        				
+        				
+        			},
+        			error: function(a,b,c) {
+        				console.log(a,b,c);
+        			}
+        		});
+        		
+        	}
+        	
+        });
    			
    
    </script>

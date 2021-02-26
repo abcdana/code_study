@@ -3,7 +3,6 @@ package com.test.codestudy.ajax;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -59,27 +58,57 @@ public class Ex05JsonData extends HttpServlet {
 //      writer.print("}");
       
       
+//      MemberDAO dao = new MemberDAO();
+//      ArrayList<MemberDTO> list = dao.list();
+//      
+//      String temp = "";
+//      
+//      temp += "[";
+//         for (MemberDTO dto : list) {
+//            temp += "{";
+//            temp += String.format("\"seq\":\"%s\",", dto.getSeq());
+//            temp += String.format("\"name\":\"%s\",", dto.getName());
+//            temp += String.format("\"id\":\"%s\",", dto.getId());
+//            temp += String.format("\"email\":\"%s\"", dto.getEmail());
+//            temp += "}";
+//            temp += ",";
+//         }
+//      temp = temp.substring(0, temp.length()-1);
+//      temp += "]";
+//      
+//      writer.print(temp);
+      
+      
+      
+      String buseo = req.getParameter("buseo");
+      
       MemberDAO dao = new MemberDAO();
-      ArrayList<MemberDTO> list = dao.list();
+      ArrayList<InsaDTO> list = dao.listInsa(buseo);
+      
       
       String temp = "";
       
       temp += "[";
-         for (MemberDTO dto : list) {
-            temp += "{";
-            temp += String.format("\"seq\":\"%s\",", dto.getSeq());
-            temp += String.format("\"name\":\"%s\",", dto.getName());
-            temp += String.format("\"id\":\"%s\",", dto.getId());
-            temp += String.format("\"email\":\"%s\"", dto.getEmail());
-            temp += "}";
-            temp += ",";
-         }
+      
+      	for(InsaDTO dto : list) {
+	      temp += "{";
+	      temp += String.format("\"num\":\"%s\",", dto.getNum());
+	      temp += String.format("\"name\":\"%s\",", dto.getName());
+	      temp += String.format("\"buseo\":\"%s\",", dto.getBuseo());
+	      temp += String.format("\"jikwi\":\"%s\",", dto.getJikwi());
+	      temp += String.format("\"basicpay\":\"%s\"", dto.getBuseo());
+	      temp += "}";
+	      temp += ",";
+      	}
+      
       temp = temp.substring(0, temp.length()-1);
       temp += "]";
       
       writer.print(temp);
       
       writer.close();
+      
+      
       
    }
 

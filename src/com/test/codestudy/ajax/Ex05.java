@@ -1,6 +1,7 @@
 package com.test.codestudy.ajax;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +17,14 @@ public class Ex05 extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
+		//1. DB 작업 -> select -> 부서 목록
+		//2. 결과 + JSP 호출하기
+		
+		MemberDAO dao = new MemberDAO();
+		ArrayList<String> list = dao.listBuseo();
+		
+		
+		req.setAttribute("list", list);
 		
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/ajax/ex05.jsp");

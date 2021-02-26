@@ -126,6 +126,73 @@ public class MemberDAO {
 	      
 	      return null;
 	   }
+
+
+
+	//Ex05 서블릿이 부서 목록 달라고 위임
+	public ArrayList<String> listBuseo() {
+
+		try {
+			
+			String sql = "select distinct buseo from tblInsa";
+			
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+			
+			ArrayList<String> list = new ArrayList<String>();
+			
+			while (rs.next()) {
+				list.add(rs.getString("buseo"));
+			}
+			
+			return list;
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+		
+		return null;
+	}
+
+
+
+	//Ex05 Json 서블릿이 인사테이블 리스트 달라고 위임
+	public ArrayList<InsaDTO> listInsa(String buseo) {
+		
+		try {
+			
+			String sql = "select * from tblInsa where buseo = '" + buseo + "'";
+			
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+			
+			ArrayList<InsaDTO> list = new ArrayList<InsaDTO>();
+			
+			while (rs.next()) {
+				InsaDTO dto = new InsaDTO();
+				dto.setNum(rs.getString("num"));
+				dto.setName(rs.getString("name"));
+				dto.setBuseo(rs.getString("buseo"));
+				dto.setJikwi(rs.getString("jikwi"));
+				dto.setBasicpay(rs.getString("basicpay"));
+				
+				list.add(dto);
+			}
+			
+			return list;
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+		
+		return null;
+	}
 	
 
 	
