@@ -93,6 +93,40 @@ public class MemberDAO {
 		return 0;
 	}
 	
+	
+	
+	public ArrayList<MemberDTO> list() {
+	      
+	      try {
+	         
+	         String sql = "select * from tblMember";
+	         
+	         stat = conn.createStatement();
+	         
+	         rs = stat.executeQuery(sql);
+	         
+	         ArrayList<MemberDTO> list = new ArrayList<MemberDTO>();
+	         
+	         while (rs.next()) {
+	            MemberDTO dto = new MemberDTO();
+	            
+	            dto.setSeq(rs.getString("seq"));
+	            dto.setName(rs.getString("name"));
+	            dto.setId(rs.getString("id"));
+	            dto.setEmail(rs.getString("email"));
+	            
+	            list.add(dto);
+	         }
+	         
+	         return list;
+	         
+	      } catch (Exception e) {
+	         System.out.println(e);
+	      }
+	      
+	      return null;
+	   }
+	
 
 	
 }
